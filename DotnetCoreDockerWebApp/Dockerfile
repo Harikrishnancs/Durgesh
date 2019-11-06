@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk AS build
 COPY . .
-RUN dotnet restore "DotnetCoreDockerWebApp/DotnetCoreDockerWebApp.csproj"
+RUN dotnet restore "DotnetCoreDockerWebApp.csproj"
 
 RUN dotnet build "DotnetCoreDockerWebApp.csproj" -c Release -o /app
 
