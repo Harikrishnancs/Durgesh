@@ -1,17 +1,16 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mmicrosoft/dotnet:2.2-sdk AS build-env
 WORKDIR /app
-EXPOSE 80
 
-FROM microsoft/dotnet:2.2-sdk AS build
-COPY . .
-RUN dotnet restore "DotnetCoreDockerWebApp.csproj"
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
 
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-
-FROM build AS publish
-RUN dotnet publish "DotnetCoreDockerWebApp.csproj" -c Release -o /app
-
-FROM base AS final
-
-COPY --from=publish /app .
+# Build runtime image
+FROM microsoft/dotnet:2.2-aspnetcore-runtime
+WORKDIR /app
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "DotnetCoreDockerWebApp.dll"]
