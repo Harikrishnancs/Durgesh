@@ -6,10 +6,10 @@ FROM microsoft/dotnet:2.2-sdk AS build
 COPY . .
 RUN dotnet restore "DotnetCoreDockerWebApp.csproj"
 
-RUN dotnet build "DotnetCoreDockerWebApp.csproj" -c Release -o /app
+RUN dotnet build "DotnetCoreDockerWebApp.csproj" 
 
 FROM build AS publish
-RUN dotnet publish "DotnetCoreDockerWebApp.csproj" -c Release -o /app
+RUN dotnet publish "DotnetCoreDockerWebApp.csproj" 
 
 FROM base AS final
 
